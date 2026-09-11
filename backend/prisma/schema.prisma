@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Course {
+  id           Int          @id @default(autoincrement())
+  courseName   String       @unique
+  description  String
+  category     String
+  price        String
+  level        String
+  duration     String
+  rating       Float        @default(0)
+  totalRatings Int          @default(0)
+  bestseller   Boolean      @default(false)
+  sellerId     Int?
+  seller       User?        @relation(fields: [sellerId], references: [id])
+  orders       Order[]
+  reviews       Review[]
+  sections     Section[]
+  pathCourses  PathCourse[]
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  subject   String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id             Int              @id @default(autoincrement())
+  name           String
+  email          String           @unique
+  password       String
+  role           String           @default("USER")
+  createdAt      DateTime         @default(now())
+  courses        Course[]
+  orders         Order[]
+  reviews        Review[]
+  lessonProgress LessonProgress[]
+}
+
+model Subscription {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  createAt DateTime @default(now())
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  courseId  Int
+  amount    String
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+}
+
+model Section {
+  id       Int      @id @default(autoincrement())
+  title    String
+  order    Int      @default(1)
+  courseId Int
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons  Lesson[]
+}
+
+model Lesson {
+  id        Int              @id @default(autoincrement())
+  title     String
+  videoUrl  String
+  duration  String?
+  order     Int              @default(1)
+  sectionId Int
+  section   Section          @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  progress  LessonProgress[]
+}
+
+model LessonProgress {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  lessonId    Int
+  isCompleted Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+}
+
+model SkillPath {
+  id          Int          @id @default(autoincrement())
+  title       String       @unique
+  description String
+  category    String
+  level       String       @default("Beginner")
+  courses     PathCourse[]
+  createdAt   DateTime     @default(now())
+}
+
+model PathCourse {
+  id          Int       @id @default(autoincrement())
+  stepOrder   Int
+  skillPathId Int
+  courseId    Int
+  skillPath   SkillPath @relation(fields: [skillPathId], references: [id], onDelete: Cascade)
+  course      Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([skillPathId, courseId])
+}
+
+model Review {
+  id          Int   @id @default(autoincrement())
+  rating      Int
+  comment    String?
+  userId     Int
+  courseId   Int
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references:[id])
+  course Course @relation(fields:[courseId], references:[id])
+
+  @@unique([userId, courseId])
+}
