@@ -37,7 +37,7 @@ function AdminDashboard() {
   }, []);
 
   useEffect(() => {
-    if(!isAdmin) return;
+    if (!isAdmin) return;
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
 
@@ -53,7 +53,7 @@ function AdminDashboard() {
       setUsers(data);
     }
     fetchUser();
-  },[isAdmin]);
+  }, [isAdmin]);
 
   const handleAddCourse = async (
     e: React.FormEvent<HTMLFormElement>
@@ -119,21 +119,19 @@ function AdminDashboard() {
 
   const handleDelete = async (id: number) => {
     const response = await fetch(
-        `${API_URL}/api/courses/${id}`,
-        {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
+      `${API_URL}/api/courses/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
         }
+      }
     );
 
-    const result = await response.json();
-
-    if(response.ok){
-        setCourses((prev)=>
-            prev.filter((course)=>course.id !== id)
-        )
+    if (response.ok) {
+      setCourses((prev) =>
+        prev.filter((course) => course.id !== id)
+      )
     }
   }
 
@@ -150,8 +148,6 @@ function AdminDashboard() {
           },
         }
       );
-
-      const data = await response.json();
 
       if (!response.ok) {
         console.error("Failed to update seller status.");
