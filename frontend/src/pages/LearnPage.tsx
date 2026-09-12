@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-const API_URL = "https://skillpath-backend.onrender.com";
+const API_URL = "https://skillpaths-backend.onrender.com";
 
 type Progress = { isCompleted: boolean };
 

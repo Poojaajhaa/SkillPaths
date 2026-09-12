@@ -2,7 +2,7 @@ import { NavLink, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { Course } from "../components/courses/CourseCard";
 
-const API_URL = "https://skillpath-backend.onrender.com";
+const API_URL = "https://skillpaths-backend.onrender.com";
 
 
 type Lesson = {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const API_URL = "https://skillpath-backend.onrender.com";
+const API_URL = "https://skillpaths-backend.onrender.com";
 
 type Order = {
     id: number;

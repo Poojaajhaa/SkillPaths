@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
-const API_URL = "https://skillpath-backend.onrender.com";
+const API_URL = "https://skillpaths-backend.onrender.com";
 
 function BlogPage() {
   const [email, setEmail] = useState("");

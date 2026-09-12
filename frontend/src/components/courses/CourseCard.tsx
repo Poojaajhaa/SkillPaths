@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-const API_URL = "https://skillpath-backend.onrender.com";
+const API_URL = "https://skillpaths-backend.onrender.com";
 
 export type Course = {
   id: number;
