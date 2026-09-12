@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 
+const API_URL = "https://skillpath-backend.onrender.com";
+
 function BlogPage() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -52,7 +54,7 @@ function BlogPage() {
       setSubmitting(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/subscribe",
+        `${API_URL}/api/subscribe`,
         {
           method: "POST",
           headers: {

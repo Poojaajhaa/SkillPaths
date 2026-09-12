@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+const API_URL = "https://skillpath-backend.onrender.com";
+
 type Order = {
     id: number;
     amount: string;
@@ -24,7 +26,7 @@ function MyOrdersPage() {
             }
 
             try {
-                const response = await fetch("http://localhost:5000/api/orders",{
+                const response = await fetch(`${API_URL}/api/orders`,{
                     headers: {
                         Authorization: `Bearer ${token}`
                     },

@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { Course } from "../components/courses/CourseCard";
 
+const API_URL = "https://skillpath-backend.onrender.com";
+
 function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [search, setSearch] = useState("");
@@ -29,7 +31,7 @@ function CoursesPage() {
         setError("");
 
         const response = await fetch(
-          "http://localhost:5000/api/courses"
+          `${API_URL}/api/courses`
         );
 
         if (!response.ok) {

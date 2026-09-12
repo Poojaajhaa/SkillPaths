@@ -17,12 +17,10 @@ async function resetPassword(email?: string, newPassword?: string) {
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    const user = await prisma.user.update({
+    await prisma.user.update({
         where: { email },
         data: { password: hashedPassword }
     });
-
-    console.log('Password reset for:', user.email);
 }
 
 if (require.main === module) {

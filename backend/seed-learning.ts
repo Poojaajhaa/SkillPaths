@@ -14,12 +14,10 @@ async function seedLearningContent() {
         },
     });
 
-    console.log("Section created:", section);
-
     const lesson1 = await prisma.lesson.create({
         data: {
             title: "Welcome to the course",
-            videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+            videoUrl:  "https://www.youtube.com/embed/w7ejDZ8SWv8",
             duration: "2 min",
             order: 1,
             sectionId: section.id,
@@ -30,13 +28,12 @@ async function seedLearningContent() {
     const lesson2 = await prisma.lesson.create({
         data: {
             title: "Setting up your environmet",
-            videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+            videoUrl:  "https://www.youtube.com/embed/w7ejDZ8SWv8",
             duration: "5 min",
             order: 2,
             sectionId: section.id,
         },
     });
-    console.log("Lessons created:" , lesson1, lesson2);
 
 }
 

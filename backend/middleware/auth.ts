@@ -25,8 +25,6 @@ export const authenticateToken = async (
   try {
     const authHeader = req.headers.authorization;
 
-    console.log("Received auth header:", authHeader);
-
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
         message: "Access token required",
@@ -66,21 +64,14 @@ export const authenticateToken = async (
         role: user.role,
       };
 
-      console.log("AUTH USER:", {
-        userId: user.id,
-        role: user.role,
-      });
-
       next();
       return;
-    } catch (err) {
-      console.error("Token verification failed:", err);
+    } catch {
       return res.status(401).json({
         message: "Invalid or expired token"
       });
     }
-  } catch (error) {
-    console.error("Authentication error:", error);
+  } catch {
 
     return res.status(401).json({
       message: "Invalid or expired token"
@@ -108,9 +99,6 @@ export const requireSeller = (
   next: NextFunction
 ) => {
   const role = normalizeRole(req.user?.role);
-
-  console.log("Raw req.user:", req.user);
-  console.log("Normalized role:", role);
 
   if (role !== "SELLER" && role !== "ADMIN") {
     return res.status(403).json({

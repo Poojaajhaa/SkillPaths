@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import type { Course } from "../components/courses/CourseCard";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = "https://skillpath-backend.onrender.com";
+
+
 function CartPage() {
   const [cartItems, setCartItems] = useState<Course[]>([]);
   const [checkingOut, setCheckingOut] = useState(false)
@@ -52,7 +55,7 @@ function CartPage() {
 
     try {
       for(const item of cartItems) {
-        const response = await fetch("http://localhost:5000/api/orders" ,{
+        const response = await fetch(`${API_URL}/api/orders` ,{
           method: "POST",
           headers: {
             "Content-Type": "application/json",

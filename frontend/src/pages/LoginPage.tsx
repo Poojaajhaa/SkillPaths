@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = "https://skillpath-backend.onrender.com";
+
 function LoginPage(){
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -26,7 +28,7 @@ function LoginPage(){
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/login",
+        `${API_URL}/api/auth/login`,
         {
           method: "POST",
           headers: {

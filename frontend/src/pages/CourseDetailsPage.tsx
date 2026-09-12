@@ -2,6 +2,8 @@ import { NavLink, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { Course } from "../components/courses/CourseCard";
 
+const API_URL = "https://skillpath-backend.onrender.com";
+
 
 type Lesson = {
     id: number;
@@ -45,8 +47,7 @@ function CourseDetailsPage (){
         const loadCourses = async() => {
             try {
               const response = await fetch(
-                `http://localhost:5000/api/courses/${encodeURIComponent(courseName || "")}`
-        
+                `${API_URL}/api/courses/${encodeURIComponent(courseName || "")}`
               );
             
               if(!response.ok){
@@ -57,7 +58,7 @@ function CourseDetailsPage (){
               setCourse(data);
 
               const curriculumRes = await fetch(
-                `http://localhost:5000/api/courses/${data.id}/curriculum-preview`
+                `${API_URL}/api/courses/${data.id}/curriculum-preview`
               );
               if(curriculumRes.ok){
                 const curriculumData = await curriculumRes.json();
@@ -65,8 +66,8 @@ function CourseDetailsPage (){
               }
 
               const reviewsRes = await fetch(
-                `http://localhost:5000/api/courses/${data.id}/reviews`
-               );
+                `${API_URL}/api/courses/${data.id}/reviews`
+              );
                if (reviewsRes.ok) {
                   const reviewsData = await reviewsRes.json();
                   setReviews(reviewsData);
@@ -75,7 +76,7 @@ function CourseDetailsPage (){
               const token = localStorage.getItem("token");
               if(token){
                 const ownRes = await fetch(
-                    `http://localhost:5000/api/orders/owns/${data.id}`,
+                    `${API_URL}/api/orders/owns/${data.id}`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
                 if(ownRes.ok){
@@ -123,7 +124,7 @@ function CourseDetailsPage (){
 
         try {
             const response = await fetch(
-                `http://localhost:5000/api/courses/${course.id}/reviews`,
+                `${API_URL}/api/courses/${course.id}/reviews`,
                 {
                     method: "POST",
                     headers: {
@@ -148,7 +149,7 @@ function CourseDetailsPage (){
             setReviewMessage("Review submitted! Thank you.");
 
             const reviewsRes = await fetch(
-                `http://localhost:5000/api/courses/${course.id}/reviews`
+                `${API_URL}/api/courses/${course.id}/reviews`
             );
             if (reviewsRes.ok) {
                 const reviewsData = await reviewsRes.json();

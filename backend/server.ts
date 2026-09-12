@@ -289,8 +289,6 @@ app.get("/api/seller/orders",
   requireSeller,
   async(req, res) => {
     try {
-      console.log("AUTH USER:", req.user);
-      
       const orders = await prisma.order.findMany({
         where: {
           course: {
@@ -305,7 +303,6 @@ app.get("/api/seller/orders",
           createdAt: "desc",
         },
       });
-      console.log("SELLER ORDERS:" , orders);
 
       return res.json(
         orders.map((order) => ({
@@ -492,9 +489,6 @@ app.put(
     try {
       const userId = Number(req.params.id);
 
-      console.log("PARAM ID:", req.params.id);
-      console.log("USER ID:", userId);
-
       const user = await prisma.user.update({
         where: {
           id: userId,
@@ -585,7 +579,6 @@ app.post("/api/auth/login", async (req, res) => {
         expiresIn: "1d",
       }
     );
-    console.log("JWT_SECRET exists:", !!process.env.JWT_SECRET);
 
     return res.status(200).json({
       message: "Login successful",
@@ -732,7 +725,6 @@ app.delete(
 
 app.post("/api/auth/register", async (req, res) => {
   try {
-    console.log("/api/auth/register called with body:", req.body);
     // Inline validation to avoid dependency on external schema at runtime
     const { name, email, password, role } = req.body || {};
 

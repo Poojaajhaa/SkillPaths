@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+const API_URL = "https://skillpath-backend.onrender.com";
+
 type Lesson = {
     id: number;
     title: string;
@@ -43,7 +45,7 @@ function CurriculumManager() {
         if (!courseId) return;
 
         try {
-            const response = await fetch(`http://localhost:5000/api/courses/${courseId}/curriculum`, {
+            const response = await fetch(`${API_URL}/api/courses/${courseId}/curriculum`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -73,7 +75,7 @@ function CurriculumManager() {
         setAddingSection(true);
 
         try {
-            const response = await fetch(`http://localhost:5000/api/courses/${courseId}/sections`, {
+            const response = await fetch(`${API_URL}/api/courses/${courseId}/sections`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -108,7 +110,7 @@ function CurriculumManager() {
 
         try {
             const response = await fetch (
-                `http://localhost:5000/api/sections/${sectionId}`,{
+                `${API_URL}/api/sections/${sectionId}`,{
                     method: "DELETE",
                     headers: {Authorization: `Bearer ${token}`},
                 }
@@ -138,7 +140,7 @@ function CurriculumManager() {
             const section = sections.find((s) => s.id === sectionId);
             const nextOrder = (section?.lessons.length ?? 0) + 1;
 
-            const response = await fetch(`http://localhost:5000/api/sections/${sectionId}/lessons`, {
+            const response = await fetch(`${API_URL}/api/sections/${sectionId}/lessons`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -14,7 +14,7 @@ async function makeAdmin(){
             role: "ADMIN"
         },
     });
-    console.log("User role updated", user.email, user.role);
+    // Role update completed without logging sensitive user details.
     await prisma.$disconnect();
 }
 makeAdmin();

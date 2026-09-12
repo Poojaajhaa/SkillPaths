@@ -1,4 +1,9 @@
 import { useState } from "react";
+
+const API_URL = "https://skillpath-backend.onrender.com";
+
+
+
 function ContactPage() {
     const [submitted, setSubmitted] = useState<boolean>(false);
     const [error , setError] = useState<string>("");
@@ -23,7 +28,7 @@ function ContactPage() {
     };
 
     try {
-        const response = await fetch("http://localhost:5000/api/contact", {
+        const response = await fetch(`${API_URL}/api/contact`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

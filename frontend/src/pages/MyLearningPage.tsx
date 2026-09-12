@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
+const API_URL = "https://skillpath-backend.onrender.com";
+
 type MyCourse = {
     id: number;
     courseName: string;
@@ -33,7 +35,7 @@ function MyLearningPage() {
 
         try {
             const response = await fetch (
-                "http://localhost:5000/api/my-learning", {
+                `${API_URL}/api/my-learning`, {
                     headers: { Authorization: `Bearer ${token}`}
                 }
             );

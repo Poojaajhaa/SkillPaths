@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+const API_URL = "https://skillpath-backend.onrender.com";
+
 type Progress = { isCompleted: boolean };
 
 type Lesson = {
@@ -44,7 +46,7 @@ function LearnPage() {
 
             try {
                 const response = await fetch(
-                    `http://localhost:5000/api/courses/${courseId}/learn`,
+                    `${API_URL}/api/courses/${courseId}/learn`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -86,7 +88,7 @@ function LearnPage() {
 
         try {
             const response = await fetch(
-                `http://localhost:5000/api/lessons/${lesson.id}/progress`,
+                `${API_URL}/api/lessons/${lesson.id}/progress`,
                 {
                     method: "PUT",
                     headers: {

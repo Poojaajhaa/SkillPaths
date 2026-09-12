@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = "https://skillpath-backend.onrender.com";
+
 type Order = {
     id: number;
     amount: string;
@@ -32,7 +34,7 @@ function SellerOrdersPage() {
             }
 
             try {
-                const response = await fetch("http://localhost:5000/api/seller/orders", {
+                const response = await fetch(`${API_URL}/api/seller/orders`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
@@ -72,7 +74,7 @@ function SellerOrdersPage() {
 
         try {
             const response = await fetch(
-                `http://localhost:5000/api/seller/orders/${orderId}/status`, {
+                `${API_URL}/api/seller/orders/${orderId}/status`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
