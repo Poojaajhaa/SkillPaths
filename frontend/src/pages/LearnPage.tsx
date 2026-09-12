@@ -158,11 +158,12 @@ function LearnPage() {
                     {activeLesson ? (
                         <div>
                             <div className="aspect-video w-full overflow-hidden rounded-xl bg-black">
-                                <video
+                                <iframe
                                     key={activeLesson.id}
                                     src={activeLesson.videoUrl}
-                                    controls
                                     className="h-full w-full"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
                                 />
                             </div>
 

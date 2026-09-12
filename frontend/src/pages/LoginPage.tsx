@@ -37,7 +37,6 @@ function LoginPage(){
       );
 
       const result = await response.json();
-      console.log("LOGIN RESULT:" , result);
 
       if (!response.ok) {
         throw new Error(result.message || "Login failed");
@@ -45,24 +44,10 @@ function LoginPage(){
 
       localStorage.setItem("token", result.token);
       localStorage.setItem("user", JSON.stringify(result.user));
-      window.dispatchEvent(new Event("auth-change"))
-      console.log("SAVED TOKEN:",localStorage.getItem("token"));
+      window.dispatchEvent(new Event("auth-change"));
       setSuccess("Login successful!");
       navigate("/");
-      
-      const token = localStorage.getItem("token");
-      const profileResponse = await fetch(
-          "http://localhost:5000/api/profile",
-          {
-            headers: {
-               Authorization: `Bearer ${token}`,
-            },
-    }
-);
 
-const profileData = await profileResponse.json();
-
-console.log(profileData);
       form.reset();
     } catch (err) {
       setError(

@@ -200,7 +200,7 @@ function CurriculumManager() {
                             {section.order}.{section.title}
                         </h2>
                         <button onClick={() => handleDeleteSection(section.id)} 
-                           className="text-sm font-medium text-red-600 hover :text-red-800"
+                           className="text-sm font-medium text-red-600 hover:text-red-800"
                           >
                          Delete Section</button>
 

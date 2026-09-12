@@ -25,12 +25,6 @@ function SellerOrdersPage() {
     useEffect(() => {
         const fetchSellerOrders = async () => {
             const token = localStorage.getItem("token");
-            const storedUser = localStorage.getItem("user");
-            const userRole = storedUser ? JSON.parse(storedUser).role : null;
-
-            // Fixed: use !!token so it correctly prints true when token is present
-            console.log("Token exists:", !!token);
-            console.log("User role:", userRole);
 
             if (!token) {
                 setLoading(false);

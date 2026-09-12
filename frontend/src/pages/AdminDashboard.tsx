@@ -27,7 +27,6 @@ function AdminDashboard() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("ADMIN COURSES:", data);
         setCourses(data);
       })
       .finally(() => {
@@ -89,7 +88,7 @@ function AdminDashboard() {
       const result = await response.json();
 
       if (!response.ok) {
-        console.error("COURSE SAVE ERROR:", result);
+        console.error("Failed to save course.");
         return;
       }
 
@@ -112,7 +111,6 @@ function AdminDashboard() {
   };
 
   const handleEdit = (course: Course) => {
-    console.log("EDITING CLICKED:" , course);
     setEditingCourse(course);
     setShowForm(true);
   };
@@ -129,7 +127,6 @@ function AdminDashboard() {
     );
 
     const result = await response.json();
-    console.log("DELETE COURSE RESULT:", result);
 
     if(response.ok){
         setCourses((prev)=>
@@ -155,7 +152,7 @@ function AdminDashboard() {
       const data = await response.json();
 
       if (!response.ok) {
-        console.error("MAKE SELLER ERROR:", data);
+        console.error("Failed to update seller status.");
         return;
       }
 
@@ -172,9 +169,11 @@ function AdminDashboard() {
   return (
     <main className="min-h-screen bg-gray-50 px-6 py-16">
       <div className="mx-auto max-w-7xl">
-        <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+        <h1 className="text-3xl font-bold text-gray-900">{isAdmin ? "Admin Dashboard" : "Seller Dashboard"}</h1>
 
-        <p className="mt-2 text-gray-600">Manage SkillPath courses.</p>
+        <p className="mt-2 text-gray-600">
+          {isAdmin ? "Manage SkillPath couses and users" : "Manage your courses."}
+        </p>
 
         <button
           onClick={() => {
