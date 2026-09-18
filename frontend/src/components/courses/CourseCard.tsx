@@ -1,166 +1,48 @@
 import { NavLink } from "react-router-dom";
+import type { Course } from "../../types/course";
 
-const API_URL = "https://skillpaths-backend.onrender.com";
-
-export type Course = {
-  id: number;
-  courseName: string;
-  description: string;
-  category: string;
-  price: string;
-  level: string;
-  duration: string;
-  rating: number;
-  totalRatings: number;
-  bestseller: boolean;
-};
-
-export type CourseCardProps = {
+type CourseCardProps = {
   course: Course;
 };
 
 function CourseCard({ course }: CourseCardProps) {
-
-  const handleAddToCart = () => {
-    const existingCart = JSON.parse(
-      localStorage.getItem("cart") || "[]"
-    );
-
-    const alreadyInCart = existingCart.some(
-      (item: Course) => item.id === course.id
-    );
-
-    if (alreadyInCart) {
-      alert("Course is already in your cart!");
-      return;
-    }
-
-    const updatedCart = [...existingCart, course];
-
-    localStorage.setItem(
-      "cart",
-      JSON.stringify(updatedCart)
-    );
-
-    window.dispatchEvent(new Event("cart-change"));
-
-    alert("Course added to cart!");
-  };
-
-  const handleBuy = async () => {
-    const token = localStorage.getItem("token");
-
-    try {
-      const response = await fetch(`${API_URL}/api/orders`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token ? `Bearer ${token}` : "",
-        },
-        body: JSON.stringify({
-          courseId: course.id,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.message || "Purchase failed");
-        return;
-      }
-
-      alert("Order created successfully!");
-    } catch (error) {
-      console.error("Purchase error:", error);
-      alert("Purchase failed");
-    }
-  }
-    
-
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-
-      {/* Category */}
-      <span className="inline-block rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-700">
-        {course.category}
-      </span>
-
-      {course.bestseller && (
-        <span className="ml-2 inline-block rounded-full bg-yellow-100 px-3 py-1 text-sm font-semibold text-yellow-700">
-          Bestseller
-        </span>
-      )}
-
-      {/* Course Name */}
-      <h3 className="mt-5 text-xl font-bold text-gray-900">
-        {course.courseName}
-      </h3>
-
-      <div className="mt-2 flex items-center gap-2">
-        <span className="font-bold text-yellow-500">
-          ⭐ {course.rating}
+    <article className="flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+      <div className="flex items-start justify-between gap-4">
+        <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-700">
+          {course.category}
         </span>
 
-        <span className="text-sm text-gray-500">
-           ({course.totalRatings} ratings)
-        </span>
+        {course.bestseller && (
+          <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">
+            Bestseller
+          </span>
+        )}
       </div>
 
-      {/* Description */}
-      <p className="mt-5 text-gray-600">
-        {course.description}
-      </p>
+      <h2 className="mt-5 text-xl font-bold text-gray-900">{course.courseName}</h2>
+      <p className="mt-3 flex-1 text-gray-600">{course.description}</p>
 
-      {/* Level + Duration */}
-      <div className="mt-5 flex items-center gap-4 text-sm font-bold text-gray-500">
-        <span className="text-gray-900">
-          {course.level}
-        </span>
-
-        <span className="text-gray-900">
-          {course.duration}
-        </span>
+      <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-500">
+        <span>{course.level}</span>
+        <span>{course.duration}</span>
+        {course.rating > 0 && (
+          <span>
+            {course.rating.toFixed(1)} ({course.totalRatings})
+          </span>
+        )}
       </div>
 
-      {/* Price */}
-      <h3 className="mt-5 text-xl font-bold text-gray-900">
-        {course.price}
-      </h3>
-
-      {/* Cart + Buy */}
-      <div className="mt-5 flex gap-3">
-
-        <button
-          type="button"
-          onClick={handleAddToCart}
-          className="flex-1 rounded-xl border border-purple-600 px-4 py-3 text-sm font-semibold text-purple-600 transition hover:bg-purple-50"
-        >
-          Add to Cart
-        </button>
-
-        <button
-          type="button"
-          onClick={handleBuy}
-          className="flex-1 rounded-xl bg-purple-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-purple-700"
-        >
-          Buy Now
-        </button>
-
-      </div>
-
-      {/* View Course */}
-      <div className="mt-6 flex items-center justify-between">
-
+      <div className="mt-6 flex items-center justify-between gap-4 border-t border-gray-100 pt-5">
+        <span className="font-bold text-purple-600">{course.price}</span>
         <NavLink
-          to={`/courses/${course.courseName}`}
-          className="font-medium text-purple-600 hover:text-purple-800"
+          to={`/courses/${encodeURIComponent(course.courseName)}`}
+          className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-semibold text-white hover:bg-purple-700"
         >
           View Course
         </NavLink>
-
       </div>
-
-    </div>
+    </article>
   );
 }
 

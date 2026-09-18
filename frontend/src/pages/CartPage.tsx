@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Course } from "../components/courses/CourseCard";
+import type { Course } from "../types/course";
 import { useNavigate } from "react-router-dom";
 
 const API_URL = "https://skillpaths-backend.onrender.com";
@@ -36,7 +36,6 @@ function CartPage() {
     };
   }, []);
 
-  // Same course ke saare entries ko group karke quantity nikalna
   const groupedCart: CartGroup[] = [];
   cartItems.forEach((item) => {
     const existing = groupedCart.find((g) => g.course.id === item.id);
@@ -69,7 +68,6 @@ function CartPage() {
   };
 
   const removeFromCart = (courseId: number) => {
-    // poora course (saari quantity) cart se hataye
     const updatedCart = cartItems.filter(
       (item) => item.id !== courseId
     );

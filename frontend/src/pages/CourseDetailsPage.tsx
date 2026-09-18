@@ -1,6 +1,6 @@
 import { NavLink, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import type { Course } from "../components/courses/CourseCard";
+import type { Course } from "../types/course";
 
 const API_URL = "https://skillpaths-backend.onrender.com";
 

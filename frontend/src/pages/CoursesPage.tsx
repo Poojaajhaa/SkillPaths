@@ -1,7 +1,7 @@
-import CourseCard from "../components/courses/CourseCard";
+import CourseCard from "../components/courses/CourseCard.tsx";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import type { Course } from "../components/courses/CourseCard";
+import type { Course } from "../types/course";
 
 const API_URL = "https://skillpaths-backend.onrender.com";
 
