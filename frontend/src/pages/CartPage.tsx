@@ -4,6 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 const API_URL = "https://skillpaths-backend.onrender.com";
 
+type CartGroup = {
+  course: Course;
+  quantity: number;
+};
 
 function CartPage() {
   const [cartItems, setCartItems] = useState<Course[]>([]);
@@ -32,7 +36,40 @@ function CartPage() {
     };
   }, []);
 
+  // Same course ke saare entries ko group karke quantity nikalna
+  const groupedCart: CartGroup[] = [];
+  cartItems.forEach((item) => {
+    const existing = groupedCart.find((g) => g.course.id === item.id);
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      groupedCart.push({ course: item, quantity: 1 });
+    }
+  });
+
+  const increaseQuantity = (courseId: number) => {
+    const course = cartItems.find((item) => item.id === courseId);
+    if (!course) return;
+
+    const updatedCart = [...cartItems, course];
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    setCartItems(updatedCart);
+    window.dispatchEvent(new Event("cart-change"));
+  };
+
+  const decreaseQuantity = (courseId: number) => {
+    const index = cartItems.findIndex((item) => item.id === courseId);
+    if (index === -1) return;
+
+    const updatedCart = [...cartItems];
+    updatedCart.splice(index, 1); // sirf ek instance hatao
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    setCartItems(updatedCart);
+    window.dispatchEvent(new Event("cart-change"));
+  };
+
   const removeFromCart = (courseId: number) => {
+    // poora course (saari quantity) cart se hataye
     const updatedCart = cartItems.filter(
       (item) => item.id !== courseId
     );
@@ -84,12 +121,12 @@ function CartPage() {
     }
   };
 
-  const subtotal = cartItems.reduce((sum: number, item: Course) => {
+  const subtotal = groupedCart.reduce((sum: number, group) => {
     const numericPrice = Number(
-      String(item.price).replace(/[^\d.]/g, "")
+      String(group.course.price).replace(/[^\d.]/g, "")
     );
 
-    return sum + (Number.isFinite(numericPrice) ? numericPrice : 0);
+    return sum + (Number.isFinite(numericPrice) ? numericPrice * group.quantity : 0);
   }, 0);
 
   return (
@@ -98,7 +135,7 @@ function CartPage() {
         Your Cart
       </h1>
 
-      {cartItems.length === 0 ? (
+      {groupedCart.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-gray-300 bg-white p-10 text-center shadow-sm">
           <p className="text-lg font-medium text-gray-700">
             Your cart is empty.
@@ -111,32 +148,54 @@ function CartPage() {
       ) : (
         <div className="grid gap-8 lg:grid-cols-[2fr_1fr]">
           <div className="space-y-4">
-            {cartItems.map((course) => (
+            {groupedCart.map((group) => (
               <div
-                key={course.id}
+                key={group.course.id}
                 className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between"
               >
                 <div>
                   <h2 className="text-xl font-semibold text-gray-900">
-                    {course.courseName}
+                    {group.course.courseName}
                   </h2>
 
                   <p className="mt-1 text-sm text-gray-600">
-                    {course.category}
+                    {group.course.category}
                   </p>
 
                   <p className="mt-2 text-lg font-bold text-purple-600">
-                    {course.price}
+                    {group.course.price}
                   </p>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => removeFromCart(course.id)}
-                  className="rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-100"
-                >
-                  Remove
-                </button>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 rounded-lg border border-gray-300 px-2 py-1">
+                    <button
+                      type="button"
+                      onClick={() => decreaseQuantity(group.course.id)}
+                      className="px-2 text-lg font-bold text-gray-600 hover:text-purple-600"
+                    >
+                      −
+                    </button>
+                    <span className="w-6 text-center font-semibold">
+                      {group.quantity}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => increaseQuantity(group.course.id)}
+                      className="px-2 text-lg font-bold text-gray-600 hover:text-purple-600"
+                    >
+                      +
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => removeFromCart(group.course.id)}
+                    className="rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-100"
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -175,4 +234,3 @@ function CartPage() {
 }
 
 export default CartPage;
-
